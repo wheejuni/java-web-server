@@ -17,22 +17,22 @@ public class RequestListener implements Runnable {
 
     public void run() {
         StringBuilder requestBody = new StringBuilder();
-        String line = "";
+        String line = null;
+
+        log.debug("new client connect: IP: {}, port: {}", requestSocket.getInetAddress(), requestSocket.getPort());
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(requestSocket.getInputStream(), "UTF-8"));
-            while((line = in.readLine()).equalsIgnoreCase("")){
-                System.out.println(line);
+            while((line = in.readLine()) != null){
+                log.debug(line);
                 requestBody.append(line);
+
+                if (line.equalsIgnoreCase("\n")) {
+                    break;
+                }
             }
         } catch (IOException e) {
             log.error("error while getting input stream from incoming connection: {}", e);
         }
-
-        try( BufferedWriter out = new BufferedWriter(new OutputStreamWriter(requestSocket.getOutputStream()))) {
-            out.write("hello this is server");
-        } catch (IOException e) {
-            log.error("error while writing response: {}", e);
-        }
-        System.out.println(requestBody);
+        log.info("{}", requestBody);
     }
 }
