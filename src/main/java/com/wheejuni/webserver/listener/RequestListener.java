@@ -1,5 +1,6 @@
 package com.wheejuni.webserver.listener;
 
+import com.wheejuni.webserver.http.RequestLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,10 +19,14 @@ public class RequestListener implements Runnable {
     public void run() {
         StringBuilder requestBody = new StringBuilder();
         String line = null;
+        RequestLine requestLine = null;
 
         log.debug("new client connect: IP: {}, port: {}", requestSocket.getInetAddress(), requestSocket.getPort());
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(requestSocket.getInputStream(), "UTF-8"));
+            requestLine = new RequestLine(in.readLine());
+            log.debug("request line: {}", requestLine);
+
             while((line = in.readLine()) != null){
                 log.debug(line);
                 requestBody.append(line);
