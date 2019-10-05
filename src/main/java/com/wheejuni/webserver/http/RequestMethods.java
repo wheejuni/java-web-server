@@ -4,7 +4,7 @@ import com.wheejuni.webserver.http.exceptions.NoMatchingRequestTypeException;
 
 import java.util.Arrays;
 
-public enum RequestTypes {
+public enum RequestMethods {
 
     GET,
     POST,
@@ -12,8 +12,8 @@ public enum RequestTypes {
     PATCH,
     DELETE;
 
-    public static RequestTypes getByLineString(final String lineString) {
-        return Arrays.stream(RequestTypes.values())
+    public static RequestMethods getByLineString(final String lineString) {
+        return Arrays.stream(RequestMethods.values())
                 .filter(t -> t.name()
                         .equalsIgnoreCase(lineString)).findFirst().orElseThrow(NoMatchingRequestTypeException::new);
     }

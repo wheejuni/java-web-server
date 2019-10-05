@@ -1,5 +1,6 @@
 package com.wheejuni.webserver.listener;
 
+import com.wheejuni.webserver.http.HttpHeaders;
 import com.wheejuni.webserver.http.RequestLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +18,11 @@ public class RequestListener implements Runnable {
     }
 
     public void run() {
+        StringBuilder requestHeader = new StringBuilder();
         StringBuilder requestBody = new StringBuilder();
         String line = null;
         RequestLine requestLine = null;
+        HttpHeaders headers = null;
 
         log.debug("new client connect: IP: {}, port: {}", requestSocket.getInetAddress(), requestSocket.getPort());
         try {
@@ -29,15 +32,17 @@ public class RequestListener implements Runnable {
 
             while((line = in.readLine()) != null){
                 log.debug(line);
-                requestBody.append(line);
+                requestHeader.append(line);
+                requestHeader.append("\n");
 
                 if (line.equalsIgnoreCase("\n")) {
                     break;
                 }
             }
+            headers = new HttpHeaders(requestHeader.toString());
         } catch (IOException e) {
             log.error("error while getting input stream from incoming connection: {}", e);
         }
-        log.info("{}", requestBody);
+        log.debug("generated headers: {}", requestHeader);
     }
 }

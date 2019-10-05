@@ -9,9 +9,9 @@ class RequestTypesTest extends Specification {
         String requestElement = "GET"
 
         when:
-        RequestTypes type = RequestTypes.getByLineString(requestElement)
+        RequestMethods type = RequestMethods.getByLineString(requestElement)
 
         then:
-        type == RequestTypes.GET
+        type == RequestMethods.GET
     }
 }

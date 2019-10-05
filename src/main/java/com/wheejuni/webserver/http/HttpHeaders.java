@@ -30,4 +30,11 @@ public class HttpHeaders extends LinkedHashMap<String, String> implements Serial
     public int getContentLength() {
         return Integer.parseInt(this.requestHeaderAttributes.get(CONTENT_LENGTH));
     }
+
+    @Override
+    public String toString() {
+        return "HttpHeaders{" +
+                "requestHeaderAttributes=" + requestHeaderAttributes +
+                '}';
+    }
 }

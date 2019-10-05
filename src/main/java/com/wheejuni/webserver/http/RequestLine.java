@@ -7,7 +7,7 @@ import java.util.Map;
 public class RequestLine {
     private String httpVersion;
     private String uri;
-    private RequestTypes requestType;
+    private RequestMethods requestType;
 
     public RequestLine(String line) {
         System.out.println(line);
@@ -15,7 +15,7 @@ public class RequestLine {
 
         this.uri = requestProperties.get("URI");
         this.httpVersion = requestProperties.get("http-version");
-        this.requestType = RequestTypes.getByLineString(requestProperties.get("method"));
+        this.requestType = RequestMethods.getByLineString(requestProperties.get("method"));
     }
 
     @Override
