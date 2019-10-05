@@ -3,6 +3,7 @@ package com.wheejuni.webserver.view;
 import com.wheejuni.webserver.utils.PropertyUtils;
 import com.wheejuni.webserver.view.prototype.Controller;
 import com.wheejuni.webserver.view.prototype.HttpRequest;
+import com.wheejuni.webserver.view.prototype.RestController;
 import org.codehaus.groovy.util.StringUtil;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
@@ -19,7 +20,7 @@ public class ControllerResolver {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private static ControllerResolver instance;
 
-    private List<Method> requestHandlerMethods;
+    private List<Method> viewResolverRequestHandlerMethods;
     private Properties controllerProperties;
 
     public static ControllerResolver getInstance() {
@@ -39,7 +40,10 @@ public class ControllerResolver {
         Reflections reflections = basePackageProperty != null ? new Reflections(basePackageProperty) : new Reflections();
 
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
+        Set<Class<?>> restControllerClasses = reflections.getTypesAnnotatedWith(RestController.class);
+
         List<Method> requestProcessingMethodsFromControllers = new ArrayList<>();
+        List<Method> requestProcessingMethodsFromRestControllers = new ArrayList<>();
 
         for(Class<?> controller: controllerClasses) {
             for(Method m: controller.getMethods()) {
@@ -48,7 +52,17 @@ public class ControllerResolver {
                 }
             }
         }
+
+        for(Class<?> controller: restControllerClasses) {
+            for(Method m: controller.getMethods()) {
+                if(m.isAnnotationPresent(HttpRequest.class)) {
+                    requestProcessingMethodsFromRestControllers.add(m);
+                }
+            }
+        }
+
         log.info("Request controller initialization complete, scanned {} controllers with {} request processing methods",
-                controllerClasses.size(), requestProcessingMethodsFromControllers.size());
+                controllerClasses.size() + restControllerClasses.size(),
+                requestProcessingMethodsFromControllers.size() + requestProcessingMethodsFromRestControllers.size());
     }
 }
