@@ -1,7 +1,7 @@
 package com.wheejuni.webserver.listener;
 
 import com.wheejuni.webserver.http.HttpHeaders;
-import com.wheejuni.webserver.http.RequestLine;
+import com.wheejuni.webserver.http.request.RequestLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

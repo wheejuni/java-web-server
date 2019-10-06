@@ -1,4 +1,4 @@
-package com.wheejuni.webserver.http;
+package com.wheejuni.webserver.http.request;
 
 import com.wheejuni.webserver.http.exceptions.NoMatchingRequestTypeException;
 

@@ -1,5 +1,6 @@
 package com.wheejuni.webserver.http
 
+import com.wheejuni.webserver.http.request.RequestMethods
 import spock.lang.Specification
 
 class RequestTypesTest extends Specification {

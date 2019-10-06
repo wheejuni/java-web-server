@@ -1,4 +1,4 @@
-package com.wheejuni.webserver.http;
+package com.wheejuni.webserver.http.request;
 
 import com.wheejuni.webserver.utils.HTTPUtils;
 
@@ -16,6 +16,18 @@ public class RequestLine {
         this.uri = requestProperties.get("URI");
         this.httpVersion = requestProperties.get("http-version");
         this.requestType = RequestMethods.getByLineString(requestProperties.get("method"));
+    }
+
+    public String getHttpVersion() {
+        return httpVersion;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public RequestMethods getRequestType() {
+        return requestType;
     }
 
     @Override

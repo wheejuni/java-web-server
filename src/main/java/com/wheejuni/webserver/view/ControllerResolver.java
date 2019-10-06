@@ -1,5 +1,6 @@
 package com.wheejuni.webserver.view;
 
+import com.wheejuni.webserver.http.request.RequestMapping;
 import com.wheejuni.webserver.utils.PropertyUtils;
 import com.wheejuni.webserver.view.prototype.Controller;
 import com.wheejuni.webserver.view.prototype.HttpRequest;
@@ -20,7 +21,8 @@ public class ControllerResolver {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private static ControllerResolver instance;
 
-    private List<Method> viewResolverRequestHandlerMethods;
+    private List<Method> requestProcessingMethodsFromControllers = new ArrayList<>();
+    private List<Method> requestProcessingMethodsFromRestControllers = new ArrayList<>();
     private Properties controllerProperties;
 
     public static ControllerResolver getInstance() {
@@ -42,8 +44,7 @@ public class ControllerResolver {
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
         Set<Class<?>> restControllerClasses = reflections.getTypesAnnotatedWith(RestController.class);
 
-        List<Method> requestProcessingMethodsFromControllers = new ArrayList<>();
-        List<Method> requestProcessingMethodsFromRestControllers = new ArrayList<>();
+
 
         for(Class<?> controller: controllerClasses) {
             for(Method m: controller.getMethods()) {
@@ -64,5 +65,9 @@ public class ControllerResolver {
         log.info("Request controller initialization complete, scanned {} controllers with {} request processing methods",
                 controllerClasses.size() + restControllerClasses.size(),
                 requestProcessingMethodsFromControllers.size() + requestProcessingMethodsFromRestControllers.size());
+    }
+
+    public Method resolveMatchingControllerMethod(RequestMapping mapping) {
+        return null;
     }
 }
