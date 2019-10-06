@@ -1,6 +1,9 @@
 package com.wheejuni.webserver.view;
 
+import com.wheejuni.webserver.http.exceptions.NoPathMappingFoundException;
+import com.wheejuni.webserver.http.request.RequestLine;
 import com.wheejuni.webserver.http.request.RequestMapping;
+import com.wheejuni.webserver.http.request.RequestMethods;
 import com.wheejuni.webserver.utils.PropertyUtils;
 import com.wheejuni.webserver.view.prototype.Controller;
 import com.wheejuni.webserver.view.prototype.HttpRequest;
@@ -12,10 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class ControllerResolver {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -44,8 +44,6 @@ public class ControllerResolver {
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
         Set<Class<?>> restControllerClasses = reflections.getTypesAnnotatedWith(RestController.class);
 
-
-
         for(Class<?> controller: controllerClasses) {
             for(Method m: controller.getMethods()) {
                 if(m.isAnnotationPresent(HttpRequest.class)) {
@@ -68,6 +66,13 @@ public class ControllerResolver {
     }
 
     public Method resolveMatchingControllerMethod(RequestMapping mapping) {
-        return null;
+        return this.requestProcessingMethodsFromControllers.stream()
+                .filter(m -> {
+                    HttpRequest requestAnnotation = m.getAnnotation(HttpRequest.class);
+                    List<RequestMethods> listifiedMethods = Arrays.asList(requestAnnotation.methods());
+                    String path = requestAnnotation.path();
+
+                    return mapping.isMatchingRequest(path, listifiedMethods);
+                }).findFirst().orElseThrow(NoPathMappingFoundException::new);
     }
 }

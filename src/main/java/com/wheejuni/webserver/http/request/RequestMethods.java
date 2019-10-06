@@ -10,7 +10,8 @@ public enum RequestMethods {
     POST,
     PUT,
     PATCH,
-    DELETE;
+    DELETE,
+    OPTIONS;
 
     public static RequestMethods getByLineString(final String lineString) {
         return Arrays.stream(RequestMethods.values())
